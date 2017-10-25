@@ -18,28 +18,28 @@ ylabel("Height");
 
 
 %%defines
-%alpha = 0.01;
+alpha = 0.01;
 m = length(y);
-x = [ones(m, 1), x]
-%
-%theta = [0;0];
-%
-%thetha = zeros(size(x(:,1)),1);
-%MAX_ITR = 1500;
-%
-%
-%for i=1:MAX_ITR
-%   grad = (1/m).*(x' * ((x * theta) - y));
-%   theta = theta - alpha .* grad;
-%end
-%
-%
-%hold on;
-%plot(x(:,2), x*theta, '-')
-%
-%predict1 = [1, 3.5] .*theta;
-%predict2 = [1, 7] .* theta;
-%
+ 
+
+theta = [0;0];
+
+thetha = zeros(size(x(:,1)),1);
+MAX_ITR = 1500;
+
+
+for i=1:MAX_ITR
+   grad = (1/m).*(x' * ((x * theta') - y))
+   theta = theta - alpha .* grad
+end
+
+
+hold on;
+plot(x(:,2), x*theta', '-')
+
+predict1 = [1, 3.5] .*theta;
+predict2 = [1, 7] .* theta;
+
 %%J_theta matrix
 %m = 50;
 %thetaZero = zeros(m , 1);
