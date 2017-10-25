@@ -14,24 +14,24 @@ m = length(y); % number of training examples
 
 
 % Plot the training data
-%figure; % open a new figure window
-%%plot(x, y, 'o');
-%ylabel('Height in meters')
-%xlabel('Age in years')
+figure; % open a new figure window
+plot(x, y, 'o');
+ylabel('Height in meters')
+xlabel('Agqe in years')
 
 % Gradient descent
 x = [ones(m, 1) x]; % Add a column of ones to x
 theta = zeros(size(x(1,:)))' % initialize fitting parameters
 MAX_ITR = 1500;
 alpha = 0.07;
-x*theta
-for num_iterations = 1:1
+
+for num_iterations = 1:MAX_ITR
     % This is a vectorized version of the 
     % gradient descent update formula
     % It's also fine to use the summation formula from the videos
     
     % Here is the gradient
-    grad = (1/m).* x' * ((x * theta) - y)
+    grad = (1/m).* x' * ((x * theta) - y);
     
     % Here is the actual update
     theta = theta - alpha .* grad;
@@ -47,9 +47,9 @@ theta
 
 % Plot the linear fit
 hold on; % keep previous plot visible
-%%plot(x(:,2), x*theta, '-')
-%legend('Training data', 'Linear regression')
-%hold off % don't overlay any more plots on this figure
+plot(x(:,2), x*theta, '-')
+legend('Training data', 'Linear regression')
+hold off % don't overlay any more plots on this figure
 
 % Closed form solution for reference
 % You will learn about this method in future videos
@@ -80,12 +80,12 @@ end
 % transpose J_vals before calling surf, or else the axes will be flipped
 J_vals = J_vals';
 % Surface plot
-%figure;
-%%surf(theta0_vals, theta1_vals, J_vals)
-%xlabel('\theta_0'); ylabel('\theta_1');
+figure;
+surf(theta0_vals, theta1_vals, J_vals)
+xlabel('\theta_0'); ylabel('\theta_1');
 
 % Contour plot
-%figure;
+figure;
 % Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
-%%contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 2, 15))
-%xlabel('\theta_0'); ylabel('\theta_1');
+contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 2, 15))
+xlabel('\theta_0'); ylabel('\theta_1');

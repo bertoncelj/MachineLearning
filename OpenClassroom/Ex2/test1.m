@@ -47,14 +47,8 @@ predict2 = [1, 7] .* theta;
 %%
 theta0_vals = linspace(-3, 3, 100);
 theta1_vals = linspace(-1, 1, 100);
-J_vals = zeros(length(theta0_vals), length(theta1_vals));
 
-for i = 1:length(theta0_vals)
-	  for j = 1:length(theta1_vals)
-	  t = [theta0_vals(i); theta1_vals(j)];    
-	  J_vals(i,j) = (0.5/m) .* (x * t - y)' * (x * t - y);
-    end
-end
+J_theta = zeros()
 
 J_vals = J_vals';
 
