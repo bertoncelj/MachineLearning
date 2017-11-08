@@ -34,10 +34,13 @@ theta = zeros(size(x(1,:)))'
 
 # Newton's method to minimize function. Newton's update rule:
 
-
+size( g(x*theta)' * x)
+size(x)
 #gradient
  gradient_J =  1/m .*x' *(g(x*theta) - y)
  grad = (1/m).*x' * (g(x*theta) - y)
 #Hessian 
-% Hessian = 1/m .* (g(x*theta)*(1 - g(x*theta))'*x*(x)');
+
+
+ Hessian = (1/m).* x' * (g(x*theta)) * (1 - g(x*theta)) * x
 %theta = theta - inv(Hessian) * gradient_J*J

@@ -23,7 +23,7 @@ ylabel('Exam 2 score')
 
 
 % Initialize fitting parameters
-theta = zeros(n+1, 1);
+theta = zeros(n+1, 1)
 
 % Define the sigmoid function
 g = inline('1.0 ./ (1.0 + exp(-z))'); 
