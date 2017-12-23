@@ -8,11 +8,15 @@
 %
 
 clear all; close all;
-x = load('ex2x.dat'); y = load('ex2y.dat');
-
+%x = load('ex2x.dat'); y = load('ex2y.dat');
+konc = 200;
+data = csvread('/home/tine/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
+y = data((70:konc),11);  #Radiation
+x = data(70:konc,4);
 m = length(y); % number of training examples
 
-
+x
+y
 % Plot the training data
 figure; % open a new figure window
 plot(x, y, 'o');
@@ -78,7 +82,7 @@ end
 
 % Because of the way meshgrids work in the surf command, we need to 
 % transpose J_vals before calling surf, or else the axes will be flipped
-J_vals = J_vals'
+J_vals = J_vals';
 % Surface plot
 figure;
 surf(theta0_vals, theta1_vals, J_vals)
