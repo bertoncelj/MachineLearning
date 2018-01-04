@@ -1,6 +1,13 @@
-%% Machine Learning Online Class - Exercise 1: Linear Regression
+## Machine Learning Project  - Exercise 1: Linear Regression
 
 %  Instructions
+
+#Learning solar radiation prediction on hawaii data set.
+#Training set X is temperature, outpute Y is solar radiation
+#applaying linear regression in basic form.
+
+#For more informations check Andrew Ng learnig course on MIT.
+
 %  ------------
 %
 %  This file contains code that helps you get started on the
@@ -16,81 +23,93 @@
 %     featureNormalize.m
 %     normalEqn.m
 %
-%  For this exercise, you will not need to change any code in this file,
-%  or any other files other than those mentioned above.
-%
-% x refers to the population size in 10,000s
-% y refers to the profit in $10,000s
+% x refers to the temperature
+% y refers to the solar radiation
 %
 
 %% Initialization
 clear ; close all; clc
 
 
+%% ======================= Part 1: Mining Data Set =======================
 
-%% ======================= Part 2: Plotting =======================
+#From .cvs file 
+data = csvread('/home/tine/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
 
-%konc = 180;
+#from start to the konc
+start = 70;
 konc = 180;
-data = csvread('/home/anze/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
-y = data((70:konc),11);  #Radiation
-X = data(70:konc,4);
+y = data((start:konc),11);  #Radiation
+X = data(start:konc,4);     #temperature
+
+#Time vector for graphs
 time = 1:length(X);
+
+#Draw input of singlas
+printf("Print input graphs of: \n\t X -> temperature\n");
+printf("\t Y -> Solar radiation \n");
+%Draw
 fig1=figure(1);
-plot(time,X,'o')
-hold on;
-plot(time,y,'ro')
-%axis([0 70 0 1200])
+  subplot(1,2,1);
+  plot(time,X,'o')
+  xlabel('time \it'); ylabel('Temperature [F]');
+  title('Input temperature graph')
+
+  subplot(1,2,2);
+  plot(time,y,'ro')
+  xlabel('time \it'); ylabel('Solar Radiation [W/m^2]');
+  title('Input solar radiation Y graph')
 pause(1);
 
+#as we see temp and solar are in diffrent number ranges.
+%Ideal is, when they are in range between -1 an 1 on bouth axis.
+%If we don't scale it we will have probles later, when apply gradint descent!
+%So we "normalize" X features
+
+#
 Y_real = y;
 
+#============ Part 2: NORMALIZE FEATURES =============
 [X, mu_x, sigma_x] = featureNormalize(X);
-%[y, mu_y, sigma_y] = featureNormalize(y);
+[y_normal, mu_y, sigma_y] = featureNormalize(y);
 
-fig1=figure(2);
-plot(time,X,'o')
-hold on;
-plot(time,y,'o')
-%axis([0 70 0 1200])
+
+#Draw input of singlas of normalize outputs
+printf("\nNormalize function \n");
+printf("Print input graphs of NORMALIZE FUNCTIONS: \n\t X -> temperature\n");
+printf("\t Y -> Solar radiation \n");
+%Draw
+fig2 = figure(2);
+  fig2 = subplot(1,2,1);
+  plot(time,X,'o')
+  xlabel('time \it'); ylabel('Temperature [F]');
+  title('Input NORMALIZE temperature graph')
+
+  fig2 = subplot(1,2,2);
+  plot(time,y_normal,'ro')
+  xlabel('time \it'); ylabel('Solar Radiation [W/m^2]');
+  title('Input NORMALIZE solar radiation Y graph')
 pause(2);
-%
-%sigma_x
-%sigma_y
-%mu_x
-%mu_y
-
-m = length(y); % number of training examples
- 
-
-printf("HERE!\n");
-pause();
-
-% Plot Data
-% Note: You have to complete the code in plotData.m
-plotData(X, y);
 
 
-%% =================== Part 3: Cost and Gradient descent ===================
+m = length(y);
 
-X = [ones(m, 1), X]; % Add a column of ones to x
-theta = zeros(2, 1); % initialize fitting parameters
+#Now we choose best alpa to speed up algorithe
+printf("\nChoosing best alpha \n");
 
-% Some gradient descent settings
-iterations = 1500;
-alpha = 0.1;
-
-#================================================
+#================== Part 3: CHOOSE BEST ALPHA FUNCTION=========================
 alpha = [0.001, 0.01, 0.1, 0.5, 1]; % learing rate
- 
+printf("\t From array:\n");
+printf(" \t\t %d \n", alpha);
+printf("....Drawing graphs \n\n")
 num_lines = length(alpha); % number of alphas 
 
 #create matrix J funcion [number of traning sets, numbers of alpha]
-J = zeros(50, num_lines)
+J = zeros(50, num_lines);
 
 #num of fix iterations system will execute
-MAX_ITERATION = 50
-x=X
+MAX_ITERATION = 50;
+x=X;
 for i = 1:num_lines   %takes one alpha and do a graph calculation, repeat this num_alpha times
   theta = zeros(size(x(1,:)))'; 
   for num_iteration = 1:MAX_ITERATION
@@ -108,26 +127,55 @@ endfor
 
 # draw result
 # Plot J for given alphas
-plot(1:50, J(:,1), 1:50, J(:,2), 1:50, J(:,3), 1:50, J(:,4), 1:50, J(:,5))
+  figure;
+  plot(1:50, J(:,1), 1:50, J(:,2), 1:50, J(:,3), 1:50, J(:,4), 1:50, J(:,5))
+  legend('0.001','0.01','0.1', '0.5', '1')
+  xlabel('Number of iterations')
+  ylabel('J(theta)')
 
-legend('0.001','0.01','0.1', '0.1', '0.5', '1')
-xlabel('Number of iterations')
-ylabel('J(theta)')
+printf("Best alpha is choosen on graph by function which descending in shape of 1/x. \n");
+printf("\t Alpha is 0.1 \n");
 #================================================
 
+#Draw plot X of Y 
+m = length(y); % number of training examples
+ 
+% Plot Data
+% Note: You have to complete the code in plotData.m
+plotData(X, y);
+title("Graph of temperature/solar")
+ylabel("Solar");
+xlabel("Temp")
+
+printf("Pause!\n");
+printf("Press enter to continue!");
+pause();
+
+%% =================== Part 4: Cost and Gradient descent ===================
+printf("\n")
+X = [ones(m, 1), X]; % Add a column of ones to x
+theta = zeros(2, 1); % initialize fitting parameters
+
+% Some gradient descent settings
+iterations = 1500;      #Here we can choose only around 50, and must still work ?!?
+alpha = 0.1;
+
+printf("Gradient descent\n");
+printf("\t num. iterations: %d \n", iterations);
+printf("\t alpha: %d \n", alpha);
 fprintf('\nRunning Gradient Descent ...\n')
 % run gradient descent
-[theta ,J_hist, theta_save ]= gradientDescent(X, y, theta, alpha, iterations);
 
-[theta_real ,J_hist_real, theta_save_real ]= gradientDescent(X, Y_real, theta, alpha, iterations);
+[theta , J_hist, theta_save] = gradientDescent(X, y, theta, alpha, iterations);
+
+[theta_real ,J_hist_real, theta_save_real ] = gradientDescent(X, Y_real, theta, alpha, iterations);
 printf("PAUSE! \n");
-theta_real
+theta_real;
 theta_save;
 % print theta to screen
 fprintf('Theta found by gradient descent:\n');
 fprintf('%f\n', theta);
-fprintf('Expected theta values (approx)\n');
-fprintf(' -3.6303\n  1.1664\n\n');
+
 
 % Plot the linear fit
 hold on; % keep previous plot visible
@@ -135,16 +183,10 @@ plot(X(:,2), X*theta, '-')
 legend('Training data', 'Linear regression')
 hold off % don't overlay any more plots on this figure
 
-% Predict values for population sizes of 35,000 and 70,000
-predict1 = [1, 3.5] *theta;
-fprintf('For population = 35,000, we predict a profit of %f\n',...
-    predict1*10000);
-predict2 = [1, 7] * theta;
-fprintf('For population = 70,000, we predict a profit of %f\n',...
-    predict2*10000);
 
 
-%% ============= Part 4: Visualizing J(theta_0, theta_1) =============
+
+%% ============= Part 5: Visualizing J(theta_0, theta_1) =============
 fprintf('Visualizing J(theta_0, theta_1) ...\n')
 
 % Grid over which we will calculate J
@@ -162,21 +204,29 @@ for i = 1:length(theta0_vals)
     end
 end
 
+#3D PLOT
 
 % Because of the way meshgrids work in the surf command, we need to
 % transpose J_vals before calling surf, or else the axes will be flipped
 J_vals = J_vals';
+
 % Surface plot
+printf("Draw 3D plot of theta0 and theta1.\n");
 figure;
 surf(theta0_vals, theta1_vals, J_vals)
 xlabel('\theta_0'); ylabel('\theta_1');
 hold on;
 a = 1;
+
+#draw Red Crosses
 for a = 1:100:iterations
-plot3(theta_save(1,a), theta_save(2,a), J_hist(a), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
+  plot3(theta_save(1,a), theta_save(2,a), J_hist(a), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
 end
 
+#------------------------------------
 
+printf("Draw 2d plot of theta0 and theta1.\n");
+#2D PLOT
 theta_save;
 % Contour plot
 figure;
@@ -185,6 +235,7 @@ contour(theta0_vals, theta1_vals, J_vals, logspace(1, 7, 50))
 xlabel('\theta_0'); ylabel('\theta_1');
 hold on;
 
+#draw Red Crosses
 for a = 1:100:iterations
-plot(theta_save(1,a), theta_save(2,a), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
+  plot(theta_save(1,a), theta_save(2,a), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
 end

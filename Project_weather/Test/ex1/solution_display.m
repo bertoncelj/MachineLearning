@@ -1,7 +1,7 @@
 clear all; close all; clc;
 
 konc = 5000;
-data = csvread('/home/anze/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
+data = csvread('/home/tine/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
 y = data((1:konc),11);  #Radiation
 X = data(1:konc,4);
 %
