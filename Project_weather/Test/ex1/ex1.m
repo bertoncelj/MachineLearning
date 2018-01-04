@@ -32,7 +32,7 @@ clear ; close all; clc
 
 %konc = 180;
 konc = 180;
-data = csvread('/home/tine/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
+data = csvread('/home/anze/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
 y = data((70:konc),11);  #Radiation
 X = data(70:konc,4);
 time = 1:length(X);
@@ -46,7 +46,7 @@ pause(1);
 Y_real = y;
 
 [X, mu_x, sigma_x] = featureNormalize(X);
-[y, mu_y, sigma_y] = featureNormalize(y);
+%[y, mu_y, sigma_y] = featureNormalize(y);
 
 fig1=figure(2);
 plot(time,X,'o')
@@ -78,9 +78,42 @@ theta = zeros(2, 1); % initialize fitting parameters
 
 % Some gradient descent settings
 iterations = 1500;
-alpha = 0.01;
+alpha = 0.1;
 
+#================================================
+alpha = [0.001, 0.01, 0.1, 0.5, 1]; % learing rate
+ 
+num_lines = length(alpha); % number of alphas 
 
+#create matrix J funcion [number of traning sets, numbers of alpha]
+J = zeros(50, num_lines)
+
+#num of fix iterations system will execute
+MAX_ITERATION = 50
+x=X
+for i = 1:num_lines   %takes one alpha and do a graph calculation, repeat this num_alpha times
+  theta = zeros(size(x(1,:)))'; 
+  for num_iteration = 1:MAX_ITERATION
+    %J = (1/(2*m)) .* (x .* theta' - y) .* (x .* theta' - y) This version doesn't works
+    # Calculate the J term
+    J(num_iteration, i) = (0.5/m) .* (x * theta - y)' * (x * theta - y);
+    
+    # The gradient
+    grad = (1/m).* x' * ((x * theta) - y);
+    
+    #Update theta
+    theta = theta - (alpha(i) .* grad);
+  endfor
+endfor
+
+# draw result
+# Plot J for given alphas
+plot(1:50, J(:,1), 1:50, J(:,2), 1:50, J(:,3), 1:50, J(:,4), 1:50, J(:,5))
+
+legend('0.001','0.01','0.1', '0.1', '0.5', '1')
+xlabel('Number of iterations')
+ylabel('J(theta)')
+#================================================
 
 fprintf('\nRunning Gradient Descent ...\n')
 % run gradient descent
@@ -115,8 +148,8 @@ fprintf('For population = 70,000, we predict a profit of %f\n',...
 fprintf('Visualizing J(theta_0, theta_1) ...\n')
 
 % Grid over which we will calculate J
-theta0_vals = linspace(-10, 10, 100);
-theta1_vals = linspace(-1, 4, 100);
+theta0_vals = linspace(-2000, 2000, 80);
+theta1_vals = linspace(-4000, 4000, 80);
 
 % initialize J_vals to a matrix of 0's
 J_vals = zeros(length(theta0_vals), length(theta1_vals));
@@ -148,7 +181,7 @@ theta_save;
 % Contour plot
 figure;
 % Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
-contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+contour(theta0_vals, theta1_vals, J_vals, logspace(1, 7, 50))
 xlabel('\theta_0'); ylabel('\theta_1');
 hold on;
 

@@ -36,7 +36,7 @@ fprintf('Loading data ...\n');
 %% Load Data
 
 num_end = 180;
-data = csvread('/home/tine/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
+data = csvread('/home/anze/Documents/MachineLearning/Project_weather/Data/Hawaii_data/SolarPredictionTraining.csv'); 
 y = data((70:num_end),11);  #Radiation
 X = data(70:num_end,[4,6,8])
 t = 1:length(X);
