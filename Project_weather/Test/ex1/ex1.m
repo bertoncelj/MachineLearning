@@ -81,12 +81,12 @@ printf("\t Y -> Solar radiation \n");
 %Draw
 fig2 = figure(2);
   fig2 = subplot(1,2,1);
-  plot(time,X,'o')
+  plot(time,X)
   xlabel('time \it'); ylabel('Temperature [F]');
   title('Input NORMALIZE temperature graph')
 
   fig2 = subplot(1,2,2);
-  plot(time,y_normal,'ro')
+  plot(time,y_normal)
   xlabel('time \it'); ylabel('Solar Radiation [W/m^2]');
   title('Input NORMALIZE solar radiation Y graph')
 pause(2);
